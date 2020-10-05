@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Habit } from './models/habit';
 
 @Component({
@@ -6,20 +7,65 @@ import { Habit } from './models/habit';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'habit-tracker';
+  adding: boolean = false;
+  editing: boolean = false;
+  editingIndex: number;
+
+  habitForm = new FormGroup({
+    name: new FormControl(''),
+    frequency: new FormControl(''),
+    description: new FormControl(''),
+  });
+
   public habits: Habit[] = [
     <Habit>{
       name: '15 Minute Walk',
       frequency: 'Daily',
       description:
-        'This habit makes my kitchen look nice and makes my day better the next morning.',
+        'This habit will make me stay fit and start everyday with a charged spirit',
     },
     <Habit>{
-      name: 'Weed the Garden',
+      name: 'Develop my Angular Prowess',
       frequency: 'Weekly',
-      description:
-        'The weeds get so out of hand if they wait any longer, and I like how nice our home looks with a clean lawn.',
+      description: 'Learn about a new Angular Concept',
     },
   ];
+
+  onSubmit() {
+    const habit = this.habitForm.value as Habit;
+
+    if (this.editing) {
+      this.habits.splice(this.editingIndex, 1, habit);
+    } else {
+      this.habits.push(habit);
+    }
+
+    this.editing = false;
+    this.adding = false;
+    this.exitForm();
+  }
+
+  setEditForm(habit: Habit, index: number) {
+    this.habitForm.patchValue({
+      name: habit.name,
+      frequency: habit.frequency,
+      description: habit.description,
+    });
+    this.editing = true;
+    this.editingIndex = index;
+  }
+
+  onDelete(index: number) {
+    this.habits.splice(index, 1);
+  }
+
+  exitForm() {
+    this.adding = false;
+    this.editing = false;
+    this.habitForm.reset();
+  }
+
+  ngOnInit() {}
 }
