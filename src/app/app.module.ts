@@ -12,9 +12,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CustomerComponent } from './customer/customer.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CustomerComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
