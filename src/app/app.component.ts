@@ -19,27 +19,17 @@ export class AppComponent implements OnInit {
     description: new FormControl(''),
   });
 
-  public habits: Habit[] = [
-    <Habit>{
-      name: '15 Minute Walk',
-      frequency: 'Daily',
-      description:
-        'This habit will make me stay fit and start everyday with a charged spirit',
-    },
-    <Habit>{
-      name: 'Develop my Angular Prowess',
-      frequency: 'Weekly',
-      description: 'Learn about a new Angular Concept',
-    },
-  ];
+  public habits: Habit[] = JSON.parse(localStorage.getItem('Habits')) || [];
 
   onSubmit() {
     const habit = this.habitForm.value as Habit;
 
     if (this.editing) {
       this.habits.splice(this.editingIndex, 1, habit);
+      localStorage.setItem('Habits', JSON.stringify(this.habits));
     } else {
       this.habits.push(habit);
+      localStorage.setItem('Habits', JSON.stringify(this.habits));
     }
 
     this.editing = false;
@@ -58,7 +48,8 @@ export class AppComponent implements OnInit {
   }
 
   onDelete(index: number) {
-    this.habits.splice(index, 1);
+    const remainingHabits: Habit[] = this.habits.splice(index, 1);
+    localStorage.setItem('Habits', JSON.stringify(this.habits));
   }
 
   exitForm() {
